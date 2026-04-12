@@ -1,0 +1,57 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --natwest-purple: #5B21B6;
+  --natwest-purple-light: #7C3AED;
+  --natwest-purple-pale: rgba(124, 58, 237, 0.15);
+  --color-historical: #6B7280;
+  --color-forecast: #5B21B6;
+  --color-naive: #F59E0B;
+  --color-ma: #10B981;
+  --color-scenario: #EC4899;
+  --color-anomaly-critical: #EF4444;
+  --color-anomaly-warning: #F59E0B;
+}
+
+body {
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  background-color: #f8fafc;
+}
+
+/* Smooth scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: #f1f5f9;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+
+/* Progress animation for loading steps */
+@keyframes pulse-step {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+.animate-pulse-step {
+  animation: pulse-step 1.5s ease-in-out infinite;
+}
+
+/* Briefing card typing effect */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in {
+  animation: fadeIn 0.3s ease-out forwards;
+}
