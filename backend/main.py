@@ -27,8 +27,6 @@ logging.basicConfig(
 )
 logger = logging.getLogger(__name__)
 
-FRONTEND_URL = os.getenv("FRONTEND_URL", "http://localhost:3000")
-
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -63,15 +61,18 @@ app = FastAPI(
     description=(
         "Backend API for the NatWest Forecasting Dashboard. "
         "Provides time-series forecasting, anomaly detection, scenario comparison, "
-        "and Claude AI-powered plain-English briefings."
+        "and Gemini AI-powered plain-English briefings."
     ),
     version="1.0.0",
     lifespan=lifespan,
 )
 
-# CORS: allow the configured frontend URL plus localhost for development
+# CORS: explicitly list all allowed origins.
+# Both Vercel URLs are included — the stable clean URL and the deployment hash URL —
+# so requests succeed regardless of which Vercel domain the browser is on.
 allowed_origins = [
-    FRONTEND_URL,
+    "https://natwest-forecasting.vercel.app",
+    "https://natwest-forecasting-73ftg5nf6-the-fermits-projects.vercel.app",
     "http://localhost:3000",
     "http://127.0.0.1:3000",
 ]
