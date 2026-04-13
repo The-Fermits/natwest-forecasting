@@ -277,7 +277,17 @@ NEXT_PUBLIC_API_URL=http://localhost:8000
 ```
 
 ---
+---
 
+## Screenshots
+
+| | |
+|---|---|
+| ![Forecast Dashboard](https://github.com/user-attachments/assets/06d19754-dac1-4c26-bd0e-e91b0e421e5d) | ![Anomaly Detection](https://github.com/user-attachments/assets/72cd278c-2586-4a44-ae97-d2b279aff0b5) |
+
+![Scenario Builder](https://github.com/user-attachments/assets/3133264f-bf7e-4291-ae9b-658065596b2e)
+
+---
 ## Project Structure
 
 ```
