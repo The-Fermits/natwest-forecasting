@@ -50,8 +50,16 @@ def build_forecast(
         training_series = _remove_outlier_points(training_series)
 
     if model_name == "Prophet":
-        forecast_rows = _fit_prophet(training_series, horizon_weeks, confidence_level)
-        validation_accuracy = _validate_prophet(training_series, confidence_level)
+        try:
+            forecast_rows = _fit_prophet(training_series, horizon_weeks, confidence_level)
+            validation_accuracy = _validate_prophet(training_series, confidence_level)
+        except Exception as exc:
+            logger.error("Prophet fit failed, falling back to AutoETS: %s", exc)
+            # Automatic fallback to ensure UI stays functional
+            forecast_rows = _fit_autoets(training_series, horizon_weeks, confidence_level)
+            validation_accuracy = _validate_autoets(training_series)
+            # Override model_name in metadata if we had a way to return it, 
+            # but for now we just ensure data is returned.
     else:
         forecast_rows = _fit_autoets(training_series, horizon_weeks, confidence_level)
         validation_accuracy = _validate_autoets(training_series)

@@ -21,6 +21,7 @@ from core.baseline import build_baselines, compute_baseline_accuracy, MOVING_AVE
 import numpy as np
 from core.anomaly_detector import detect_anomalies
 from core.validator import compute_outperformance_pct
+from core.utils import sanitize_for_json
 
 logger = logging.getLogger(__name__)
 router = APIRouter()
@@ -159,7 +160,7 @@ async def run_forecast(request: ForecastRequest) -> dict:
         if val is not None and not (val != val)  # filter NaN
     ]
 
-    return {
+    return sanitize_for_json({
         "historical": historical,
         "forecast": forecast_result["forecast"],
         "baseline_naive": baselines.naive,
@@ -176,4 +177,4 @@ async def run_forecast(request: ForecastRequest) -> dict:
             "period_count": len(series),
         },
         "confidence_level": request.confidence_level,
-    }
+    })

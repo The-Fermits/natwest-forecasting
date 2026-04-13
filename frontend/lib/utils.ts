@@ -65,7 +65,7 @@ export function severityBadgeClass(severity: 'warning' | 'critical'): string {
 }
 
 /**
- * Build a plain-text forecast summary for use in the Claude briefing prompt.
+ * Build a plain-text forecast summary for use in the Gemini briefing prompt.
  */
 export function buildForecastSummary(
     forecast: Array<{ date: string; lower: number; central: number; upper: number }>,

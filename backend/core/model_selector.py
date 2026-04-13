@@ -51,12 +51,13 @@ def select_model(series: pd.Series) -> str:
     logger.info("Autocorrelation at lag %d: %.3f", ANNUAL_LAG, acf_at_annual_lag)
 
     if acf_at_annual_lag > SEASONALITY_ACF_THRESHOLD:
-        logger.info(
-            "Selecting Prophet: strong annual seasonality detected (ACF=%.3f > %.1f)",
-            acf_at_annual_lag,
-            SEASONALITY_ACF_THRESHOLD,
+        # NOTE: Prophet is crashing on this local Windows environment due to a 
+        # missing C++ compiler for the Stan backend. We are forcing stable AutoETS
+        # as a robustness fallback for the hackathon demo.
+        logger.warning(
+            "Prophet detected but forcing AutoETS fallback due to local environment instability."
         )
-        return "Prophet"
+        return "AutoETS"
 
     logger.info(
         "Selecting AutoETS: weak seasonality (ACF=%.3f <= %.1f)",

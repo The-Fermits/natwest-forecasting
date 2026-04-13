@@ -11,7 +11,7 @@ import logging
 from fastapi import APIRouter
 from fastapi.responses import StreamingResponse
 
-from core.claude_narrator import stream_briefing
+from core.gemini_narrator import stream_briefing
 
 logger = logging.getLogger(__name__)
 router = APIRouter()

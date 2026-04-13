@@ -5,7 +5,7 @@ export const metadata: Metadata = {
     title: 'NatWest AI Forecasting Dashboard',
     description:
         'AI-powered predictive forecasting for NatWest banking operations teams. ' +
-        'Short-term forecasts, anomaly detection, scenario comparison, and Claude AI briefings.',
+        'Short-term forecasts, anomaly detection, scenario comparison, and Gemini AI briefings.',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

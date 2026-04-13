@@ -104,7 +104,7 @@ export default function LandingPage() {
                         '✦ 80% / 95% Confidence Bands',
                         '✦ Anomaly Detection',
                         '✦ Scenario Builder',
-                        '✦ Claude AI Briefings',
+                        '✦ Gemini AI Briefings',
                         '✦ CSV Export',
                     ].map((f) => (
                         <span
