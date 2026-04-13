@@ -39,7 +39,7 @@ export default function LandingPage() {
                 <div className="max-w-4xl mx-auto text-center">
                     <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/20 border border-purple-400/30 rounded-full text-purple-200 text-sm font-medium mb-8">
                         <span className="w-2 h-2 bg-emerald-400 rounded-full animate-pulse" />
-                        NatWest Code for Purpose — India Hackathon 2024
+                        NatWest Code for Purpose — India Hackathon 2026
                     </div>
 
                     <h1 className="text-5xl md:text-6xl font-extrabold text-white mb-6 leading-tight tracking-tight">
