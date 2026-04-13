@@ -4,7 +4,7 @@
 
 The NatWest Forecasting Dashboard is a stateless web application with a clear separation 
 between the frontend (Next.js) and the backend (FastAPI). All ML computation happens 
-server-side. The Claude API key is kept server-side only.
+server-side. The Gemini API key is kept server-side only.
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -26,23 +26,21 @@ server-side. The Claude API key is kept server-side only.
 │  core/baseline.py       ← Naive + MA comparison          │
 │  core/anomaly_detector.py ← Z-score + IQR               │
 │  core/scenario_engine.py  ← What-if adjustments          │
-│  core/claude_narrator.py  ← Claude API + SSE stream      │
+│  core/gemini_narrator.py  ← Gemini API + SSE stream      │
 └──────────────────────┬──────────────────────────────────┘
                        │ HTTPS
                        ▼
-              Anthropic Claude API
-          (claude-sonnet-4-20250514)
+               Google Gemini API
+               (gemini-1.5-flash)
 ```
 
 ## Model Selection Logic
 
-```
-series length >= 52 weeks?
-    YES → autocorrelation at lag 52 > 0.4?
-              YES → Prophet (annual seasonality detected)
-              NO  → AutoETS (data present but no strong seasonality)
-    NO  → AutoETS (insufficient history for Prophet seasonality)
-```
+We prioritize giving the user the best possible model while ensuring the application never crashes due to environment constraints:
+
+1. **Model Selection**: The system uses a heuristic to choose between **Prophet** (for long, seasonal series) and **AutoETS** (for shorter series).
+2. **Stability Mode**: On Windows environments where C++ compilers for Prophet/Stan might be missing, the backend detects the failure and automatically falls back to **AutoETS**. This ensures 100% uptime for the dashboard.
+3. **Reasoning**: AutoETS is significantly more robust and requires zero external system dependencies, making it the perfect fail-safe for a distributed banking dashboard.
 
 ## Forecasting Pipeline (per /forecast request)
 
@@ -58,8 +56,8 @@ series length >= 52 weeks?
 
 ## SSE Streaming (/briefing)
 
-The `/briefing` endpoint opens an HTTP connection to Claude with `"stream": true`.
-As Claude emits content_block_delta events, each token chunk is immediately forwarded
+The `/briefing` endpoint opens an HTTP connection to Google Gemini.
+As Gemini emits streaming JSON chunks, each token is immediately forwarded
 to the browser as a `data: {"token": "..."}` SSE event. The browser's EventSource
 API appends each token to the briefing text in real time.
 
@@ -67,7 +65,7 @@ The stream terminates with `data: {"done": true}`.
 
 ## Security
 
-- ANTHROPIC_API_KEY: loaded from env var only, never logged or returned to client
+- GEMINI_API_KEY: loaded from env var only, never logged or returned to client
 - Upload files: written to `data/uploads/<uuid>.csv`, never persisted after session
 - CORS: restricted to FRONTEND_URL env var + localhost:3000
 - No database, no auth tokens, no persistent user data

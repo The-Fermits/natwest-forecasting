@@ -108,7 +108,7 @@ Apply what-if adjustments to a base forecast.
 ---
 
 ## GET /briefing (SSE)
-Stream a Claude AI plain-English briefing.
+Stream a Gemini AI plain-English briefing.
 
 **Query params:** `metric`, `trend`, `horizon`, `anomaly_count`, `forecast_summary`, `model_used`
 

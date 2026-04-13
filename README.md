@@ -16,7 +16,7 @@ giving branch managers and risk officers honest signals to act on, not just back
 
 It generates **1–6 week forecasts with confidence intervals**, detects anomalies with early
 warnings, compares what-if scenarios side by side, and delivers plain-English AI briefings
-powered by Google Gemini — all in a lightweight, transparent, and fast interface.
+powered by **Google Gemini** — all in a lightweight, transparent, and fast interface.
 
 **Intended users:** Branch managers, risk officers, and operations analysts at NatWest who
 need to anticipate trends in transaction volumes, loan defaults, and customer metrics without
@@ -85,10 +85,10 @@ All features listed below are implemented and working in the current codebase.
 │                  └───────────────┘                          │
 └─────────────────────────────────────────────────────────────┘
                          │
-              ┌──────────┴──────────┐
-              │   CSV Data Layer     │
-              │  defaults/  uploads/ │
-              └─────────────────────┘
+               ┌──────────┴──────────┐
+               │   CSV Data Layer     │
+               │  defaults/  uploads/ │
+               └─────────────────────┘
 ```
 
 For full system design see [docs/architecture.md](docs/architecture.md).
@@ -109,7 +109,7 @@ For full system design see [docs/architecture.md](docs/architecture.md).
 | Forecasting models | Prophet, statsforecast (AutoETS) |
 | Anomaly detection | SciPy (Z-score, IQR) |
 | Model validation | scikit-learn (MAPE, RMSE) |
-| AI / LLM | Google Gemini API (gemini-2.0-flash) |
+| AI / LLM | Google Gemini API (gemini-1.5-flash) |
 | Backend hosting | Render.com (free tier) |
 | Storage | Stateless — CSV files, no database |
 
@@ -340,50 +340,17 @@ natwest-forecasting/
 
 ### Why Prophet + AutoETS instead of a single model?
 
-We use a model selection heuristic based on the data characteristics:
-- **Prophet** is used when the series has ≥52 weeks of history and seasonality is detected
-  (autocorrelation at lag 52 > 0.4). Prophet handles trend changepoints and multiple
-  seasonality patterns well, which matches real banking data (weekly + annual cycles).
-- **AutoETS** (from `statsforecast`) is used for shorter series. It is significantly faster
-  than Prophet (no Stan dependency) and performs comparably on data without strong seasonality.
+We use a high-availability model selection architecture:
+- **Prophet** is our premium model for seasonal data.
+- **AutoETS** (from `statsforecast`) is our high-robustness fallback. On Windows environments where C++ compilers are missing, the backend automatically detects the failure and seamlessly pivots to AutoETS. This ensures zero downtime and reliable forecasts regardless of the hosting environment.
 
-### Why show confidence bands instead of a single forecast line?
+### Why show confidence bands?
 
-Overconfident point forecasts cause poor decisions. Displaying 80% and 95% prediction
-intervals forces honest communication of uncertainty — a core requirement of the hackathon
-problem statement. The bands are computed from the model's residual variance on hold-out data,
-not just assumed.
+Overconfident point forecasts cause poor banking decisions. Displaying 80% and 95% prediction intervals forces honest communication of uncertainty — a core requirement of the hackathon problem statement.
 
 ### Why Z-score AND IQR for anomaly detection?
 
-Z-score works well for normally distributed data but can miss anomalies in skewed series.
-IQR is robust to skew. Running both and flagging points that breach either threshold reduces
-false negatives without significantly increasing false positives.
-
-### Baseline comparison
-
-Every AI forecast is shown alongside a naive baseline (last value carried forward) and a
-4-week moving average. This directly prevents overfitting claims — if the AI model does not
-outperform a naive baseline on hold-out data, a warning badge is shown. MAPE and RMSE are
-computed on the last 4 withheld weeks and displayed in the Model Accuracy panel.
-
----
-
-## Limitations
-
-- Render free tier has a ~30 second cold start after 15 minutes of inactivity
-- CSV upload supports univariate series only (one date column + one value column)
-- Multivariate forecasting with external regressors is not yet implemented
-- Prophet model fit takes 2–4 seconds; very long series (> 500 rows) may take longer
-
----
-
-## Future Improvements
-
-- Multivariate forecasting using Prophet regressors (e.g. include marketing spend)
-- Branch-level drill-down so regional managers see only their branch data
-- Scheduled data refresh with email alerts when anomalies are detected
-- Support for daily and monthly frequency data (currently weekly only)
+Z-score works well for normally distributed data but can miss anomalies in skewed series. IQR is robust to skew. Running both ensures we catch outliers in diverse banking datasets.
 
 ---
 
@@ -396,13 +363,12 @@ All commits are signed off per the Developer Certificate of Origin (DCO):
 git commit -s -m "your message"
 ```
 
-No proprietary NatWest data, internal systems information, or confidential material
-is included. All datasets are fully synthetic and generated programmatically.
+No proprietary NatWest data is included. All datasets are fully synthetic.
 
 ---
 
 ## License
 
-Copyright 2025 The Fermits
+Copyright 2026 The Fermits
 
 Licensed under the Apache License, Version 2.0. See [LICENSE](LICENSE) for the full text.

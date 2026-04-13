@@ -132,7 +132,7 @@ export default function AIBriefingCard({
                 </button>
                 {showPrompt && (
                     <div className="mt-2 bg-gray-50 rounded-lg p-3 text-xs text-gray-600 font-mono leading-relaxed border border-gray-200">
-                        <p><strong>Model:</strong> claude-sonnet-4-20250514</p>
+                        <p><strong>Model:</strong> Gemini 1.5 Flash</p>
                         <p><strong>Context:</strong> Metric={metricLabel}, Trend={trend}, Horizon={horizonWeeks}w, Anomalies={anomalyCount}</p>
                         <p><strong>Instructions:</strong> 3–5 sentences, plain English for non-technical banking manager. Cover trend, uncertainty, anomalies, and one recommendation.</p>
                     </div>

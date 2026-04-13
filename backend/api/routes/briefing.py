@@ -1,7 +1,7 @@
 """
-SSE streaming endpoint for Claude AI plain-English briefings.
+SSE streaming endpoint for Gemini AI plain-English briefings.
 
-The endpoint streams Claude's response token-by-token to the frontend
+The endpoint streams Gemini's response token-by-token to the frontend
 so users see text appearing in real time, creating a more responsive
 experience than waiting for the full response.
 """
@@ -27,7 +27,7 @@ async def get_briefing(
     model_used: str = "AutoETS",
 ) -> StreamingResponse:
     """
-    Stream a Claude-generated plain-English briefing via Server-Sent Events.
+    Stream a Gemini-generated plain-English briefing via Server-Sent Events.
 
     Query parameters are used (rather than POST body) so the frontend can
     initiate the SSE connection with a standard EventSource — the Web API
