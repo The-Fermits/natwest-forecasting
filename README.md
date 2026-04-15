@@ -32,8 +32,13 @@ needing data science expertise.
 | Backend API (Render) | https://natwest-forecasting-api.onrender.com |
 | API Health Check | https://natwest-forecasting-api.onrender.com/health |
 
+
 > **Note:** The backend is hosted on Render free tier. If the first request takes ~30 seconds,
 > the service is waking from sleep. Subsequent requests are fast.
+>
+> **First load:** On initial page load, the default dataset and first forecast may take
+> 30–60 seconds as the backend wakes up and loads the forecasting models into memory.
+> Subsequent forecasts run in 2–4 seconds.
 
 ---
 ---
